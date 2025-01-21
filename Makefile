@@ -5,8 +5,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = pipex.c \
 		cmd.c \
-		error.c \
-		op-cl.c \
+		close.c \
 		process.c
 
 OBJS = $(SRCS:.c=.o)

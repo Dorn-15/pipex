@@ -6,7 +6,7 @@
 /*   By: adoireau <adoireau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:56:25 by adoireau          #+#    #+#             */
-/*   Updated: 2025/01/16 16:56:58 by adoireau         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:07:33 by adoireau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	child_process1(int *fd, int *pipefd, char **cmd1, char **env)
 
 void	child_process2(int *fd, int *pipefd, char **cmd2, char **env)
 {
-	dup2(pipefd[0], STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
+	dup2(pipefd[0], STDIN_FILENO);
 	close(pipefd[0]);
 	close(pipefd[1]);
 	close(fd[0]);
