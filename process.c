@@ -6,7 +6,7 @@
 /*   By: adoireau <adoireau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:56:25 by adoireau          #+#    #+#             */
-/*   Updated: 2025/01/22 17:34:31 by adoireau         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:07:00 by adoireau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	child_process1(int *fd, int *pipefd, char **cmd1, char **env)
 {
-	if (!fd || !pipefd || !cmd1 || !env)
-		exit(EXIT_FAILURE);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 		exit(EXIT_FAILURE);
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
@@ -27,10 +25,20 @@ void	child_process1(int *fd, int *pipefd, char **cmd1, char **env)
 	execute_cmd(cmd1, env);
 }
 
+void	process1(int *fd, int *pipefd, char *cmd_str, char **env)
+{
+	char	**cmd;
+
+	cmd = ft_split(cmd_str, ' ');
+	if (!cmd)
+		exit(EXIT_FAILURE);
+	child_process1(fd, pipefd, cmd, env);
+	free_split(cmd);
+	exit(EXIT_FAILURE);
+}
+
 void	child_process2(int *fd, int *pipefd, char **cmd2, char **env)
 {
-	if (!fd || !pipefd || !cmd2 || !env)
-		exit(EXIT_FAILURE);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 		exit(EXIT_FAILURE);
 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
@@ -40,4 +48,16 @@ void	child_process2(int *fd, int *pipefd, char **cmd2, char **env)
 	close(fd[0]);
 	close(fd[1]);
 	execute_cmd(cmd2, env);
+}
+
+void	process2(int *fd, int *pipefd, char *cmd_str, char **env)
+{
+	char	**cmd;
+
+	cmd = ft_split(cmd_str, ' ');
+	if (!cmd)
+		exit(EXIT_FAILURE);
+	child_process2(fd, pipefd, cmd, env);
+	free_split(cmd);
+	exit(EXIT_FAILURE);
 }
