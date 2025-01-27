@@ -6,7 +6,7 @@
 /*   By: adoireau <adoireau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:09:14 by adoireau          #+#    #+#             */
-/*   Updated: 2025/01/23 17:43:03 by adoireau         ###   ########.fr       */
+/*   Updated: 2025/01/27 12:01:39 by adoireau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	open_files(char *in, char *out, int fd[2])
 	if (fd[0] == -1)
 	{
 		perror(in);
-		//exit(EXIT_FAILURE);
 	}
 	fd[1] = open(out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd[1] == -1)

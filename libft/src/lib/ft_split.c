@@ -6,7 +6,7 @@
 /*   By: adoireau <adoireau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 14:22:55 by adoireau          #+#    #+#             */
-/*   Updated: 2025/01/13 15:26:33 by adoireau         ###   ########.fr       */
+/*   Updated: 2025/01/27 12:44:56 by adoireau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,11 @@ void	free_split(char **tab)
 
 	index = 0;
 	if (tab)
+	{
 		while (tab[index] != NULL)
 			free(tab[index++]);
-	free(tab);
+		free(tab);
+	}
 }
 
 char	**ft_split(char const *s, char c)

@@ -6,7 +6,7 @@
 /*   By: adoireau <adoireau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:54:41 by adoireau          #+#    #+#             */
-/*   Updated: 2025/01/23 17:43:57 by adoireau         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:17:27 by adoireau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static char	*try_direct_path(char *cmd)
 {
-	if (cmd[0] == '/' && access(cmd, X_OK) == 0)
+	if ((cmd[0] == '/' || cmd[0] == '.') && access(cmd, X_OK) == 0)
 		return (ft_strdup(cmd));
 	return (NULL);
 }
@@ -88,5 +88,4 @@ void	execute_cmd(char **cmd, char **env)
 		exit(1);
 	}
 	execve(cmd_path, cmd, env);
-	exit(1);
 }

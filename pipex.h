@@ -6,7 +6,7 @@
 /*   By: adoireau <adoireau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:18:51 by adoireau          #+#    #+#             */
-/*   Updated: 2025/01/23 16:55:01 by adoireau         ###   ########.fr       */
+/*   Updated: 2025/01/27 12:08:11 by adoireau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,4 @@ void	child_process2(int *fd, int *pipefd, char **cmd2, char **env);
 void	process1(int *fd, int *pipefd, char *cmd_str, char **env);
 void	process2(int *fd, int *pipefd, char *cmd_str, char **env);
 
-void	close_prog(int (*fd)[2], char **cmd1, char **cmd2);
-void	close_pipes(int *fd, int *pipefd, pid_t pid);
-
-# endif
+#endif
