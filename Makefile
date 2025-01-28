@@ -4,8 +4,8 @@ CC = gcc
 CFLAGS = -g -o -Wall -Wextra -Werror
 
 SRCS = pipex.c \
-		cmd.c \
-		process.c
+	cmd.c \
+	process.c
 
 OBJS = $(SRCS:.c=.o)
 

@@ -6,58 +6,55 @@
 /*   By: adoireau <adoireau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:56:25 by adoireau          #+#    #+#             */
-/*   Updated: 2025/01/27 15:54:47 by adoireau         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:18:57 by adoireau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	child_process1(int *fd, int *pipefd, char **cmd1, char **env)
+void	close_all_fds(t_pipex *data)
 {
-	if (dup2(fd[0], STDIN_FILENO) == -1)
-		exit(EXIT_FAILURE);
-	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-		exit(EXIT_FAILURE);
-	close(pipefd[0]);
-	close(pipefd[1]);
-	close(fd[0]);
-	close(fd[1]);
-	execute_cmd(cmd1, env);
+	close(data->pipefd[0]);
+	close(data->pipefd[1]);
+	close(data->fd[0]);
+	close(data->fd[1]);
 }
 
-void	process1(int *fd, int *pipefd, char *cmd_str, char **env)
+void	setup_pipes(int in_fd, int out_fd, t_pipex *data)
+{
+	if (dup2(in_fd, STDIN_FILENO) == -1
+		|| dup2(out_fd, STDOUT_FILENO) == -1)
+	{
+		close_data(data);
+		exit(EXIT_FAILURE);
+	}
+	close_all_fds(data);
+}
+
+char	**prepare_cmd(char *cmd_str, t_pipex *data)
 {
 	char	**cmd;
 
 	cmd = ft_split(cmd_str, ' ');
 	if (!cmd)
+	{
+		close_data(data);
 		exit(EXIT_FAILURE);
-	child_process1(fd, pipefd, cmd, env);
-	free_split(cmd);
-	exit(EXIT_FAILURE);
+	}
+	return (cmd);
 }
 
-void	child_process2(int *fd, int *pipefd, char **cmd2, char **env)
+void	process1(t_pipex *data, char *cmd_str, char **env)
 {
-	if (dup2(fd[1], STDOUT_FILENO) == -1)
-		exit(EXIT_FAILURE);
-	if (dup2(pipefd[0], STDIN_FILENO) == -1)
-		exit(EXIT_FAILURE);
-	close(pipefd[0]);
-	close(pipefd[1]);
-	close(fd[0]);
-	close(fd[1]);
-	execute_cmd(cmd2, env);
+	data->cmd = prepare_cmd(cmd_str, data);
+	setup_pipes(data->fd[0], data->pipefd[1], data);
+	execute_cmd(data, env);
 }
 
-void	process2(int *fd, int *pipefd, char *cmd_str, char **env)
+void	process2(t_pipex *data, char *cmd_str, char **env)
 {
-	char	**cmd;
-
-	cmd = ft_split(cmd_str, ' ');
-	if (!cmd)
-		exit(EXIT_FAILURE);
-	child_process2(fd, pipefd, cmd, env);
-	free_split(cmd);
-	exit(EXIT_FAILURE);
+	close(data->pipefd[1]);
+	data->cmd = prepare_cmd(cmd_str, data);
+	setup_pipes(data->pipefd[0], data->fd[1], data);
+	execute_cmd(data, env);
 }

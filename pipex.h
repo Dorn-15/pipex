@@ -6,7 +6,7 @@
 /*   By: adoireau <adoireau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:18:51 by adoireau          #+#    #+#             */
-/*   Updated: 2025/01/27 12:08:11 by adoireau         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:43:09 by adoireau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,23 @@
 # include <errno.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
 # include <fcntl.h>
-# include <sys/types.h>
 # include <sys/wait.h>
 
-char	*find_path(char *cmd, char **env);
-void	execute_cmd(char **cmd, char **env);
+typedef struct s_pipex
+{
+	int		fd[2];
+	int		pipefd[2];
+	char	**cmd;
+	char	*cmd_path;
+}	t_pipex;
 
-void	child_process1(int *fd, int *pipefd, char **cmd1, char **env);
-void	child_process2(int *fd, int *pipefd, char **cmd2, char **env);
-void	process1(int *fd, int *pipefd, char *cmd_str, char **env);
-void	process2(int *fd, int *pipefd, char *cmd_str, char **env);
+void	close_data(t_pipex *data);
+
+char	*find_path(char *cmd, char **env);
+void	execute_cmd(t_pipex *data, char **env);
+
+void	process1(t_pipex *data, char *cmd_str, char **env);
+void	process2(t_pipex *data, char *cmd_str, char **env);
 
 #endif
