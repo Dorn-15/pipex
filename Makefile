@@ -1,33 +1,35 @@
 NAME = pipex
 
 CC = gcc
-CFLAGS = -g -o -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 SRCS = pipex.c \
 	cmd.c \
 	process.c
 
 OBJS = $(SRCS:.c=.o)
+LIBFT_DIR = ./libft
+LIBFT = $(LIBFT_DIR)/libft.a
 
 all: $(NAME)
 
-$(NAME): $(OBJS) libft
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) ./libft/libft.a
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
 
-libft:
-	make -C ./libft
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
+	$(MAKE) -C $(LIBFT_DIR) clean
 	rm -f $(OBJS)
-	make -C ./libft clean
 
 fclean: clean
+	$(MAKE) -C $(LIBFT_DIR) fclean
 	rm -f $(NAME)
-	make -C ./libft fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re
